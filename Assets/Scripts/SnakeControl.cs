@@ -16,6 +16,12 @@ public class SnakeControl : MonoBehaviour
     //记录snake的运动速度；
     public float snakeSpeed;
 
+    //记录当前snake的运动方向，防止snake反向运动,1.-1.-2.2分别表示forward，-forward，-right，right；
+    private int snakeMoveDir;
+
+    //转向时的角度误差；
+    public float angleMistake;
+
     void Start()
     {
         initialize();
@@ -25,9 +31,11 @@ public class SnakeControl : MonoBehaviour
     void Update()
     {
         controlSnake();
+    }
 
+    void FixedUpdate()
+    {
         follow();
-
     }
 
     /// <summary>
@@ -39,15 +47,20 @@ public class SnakeControl : MonoBehaviour
 
         snakeSize = 3;
 
+        snakeMoveDir = 2;
+
         for (i = 1; i <= snakeSize; i++)
         {
             snakePos[i, 1] = snake[i].transform.position;
 
             snakePos[i, 0] = transform.right;
         }
+       // Debug.Log(snake[1].transform.position + "1");
 
         //snake初始的运动方向；
         snake[1].GetComponent<Rigidbody>().velocity = transform.right * snakeSpeed;
+
+       // Debug.Log(snake[1].transform.position+"2");
     }
 
     /// <summary>
@@ -61,22 +74,41 @@ public class SnakeControl : MonoBehaviour
         v = Input.GetAxis("Vertical");
         h = Input.GetAxis("Horizontal");
 
+
         //改变snake运动的方向；
         if (v > 0)
         {
-            snake[1].GetComponent<Rigidbody>().velocity = transform.forward * snakeSpeed;
+            if(judgeDir(1))
+            {
+                return;
+            }
+            snake[1].GetComponent<Rigidbody>().velocity = new Vector3(0,0,1) * snakeSpeed;
+
         }
         else if (v < 0)
         {
+            if (judgeDir(-1))
+            {
+                return;
+            }
             snake[1].GetComponent<Rigidbody>().velocity = -transform.forward * snakeSpeed;
         }
 
         if (h>0)
         {
+            if (judgeDir(2))
+            {
+                return;
+            }
             snake[1].GetComponent<Rigidbody>().velocity = transform.right * snakeSpeed;
         }
         else if(h<0)
         {
+            if (judgeDir(-2))
+            {
+                return;
+            }
+
             snake[1].GetComponent<Rigidbody>().velocity = -transform.right * snakeSpeed;
         }     
     }
@@ -93,11 +125,28 @@ public class SnakeControl : MonoBehaviour
 
         for(i=2;i<=snakeSize;i++)
         {
+            if(snakePos[1,1]==snake[1].transform.position)
+            {
+                return;
+            }
+
             disPos = snake[i - 1].transform.position - snake[i].transform.position;
 
             disPos -= (disPos / Vector3.Magnitude(disPos));
 
+           // Debug.Log(disPos+"1");
+           // Debug.Log(snakePos[i,0]+"2");
+
+            //判断向量disPos与snakePos[i,0]是否处于误差许可范围内；
+            if(Vector3.Dot(disPos,snakePos[i,0])<=angleMistake)
+            {
+                snakePos[i, 0] = disPos;
+
+                Debug.Log(Vector3.Dot(disPos, snakePos[i, 0]));
+            }
+
             movePos = Vector3.Project(disPos, snakePos[i, 0]);
+
 
             //移动各个body的位置；
             snake[i].transform.position += movePos;
@@ -106,9 +155,24 @@ public class SnakeControl : MonoBehaviour
             snakePos[i, 1] = snake[i].transform.position;
 
         }
-
-
-
     }
 
+    /// <summary>
+    /// 判断键入的方向是否与运动的反向相反；
+    /// </summary>
+    /// <param name="dir"></param>
+    /// <returns></returns>
+    bool judgeDir(int dir)
+    {
+        if(dir+snakeMoveDir==0)
+        {
+            return true;
+        }
+        else
+        {
+            snakeMoveDir = dir;
+
+            return false;
+        }
+    }
 }
