@@ -240,3 +240,8 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/Library
+/ProjectSettings
+/Temp
+/Assets/Scenes
+/Assets/Materials
