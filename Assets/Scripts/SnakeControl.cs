@@ -19,6 +19,9 @@ public class SnakeControl : MonoBehaviour
     //记录当前snake的运动方向，防止snake反向运动,1.-1.-2.2分别表示forward，-forward，-right，right；
     private int snakeMoveDir;
 
+    //每个body所占有的空间长度；
+    private float bodySize;
+
     //转向时的角度误差；
     public float angleMistake;
 
@@ -60,7 +63,7 @@ public class SnakeControl : MonoBehaviour
         //snake初始的运动方向；
         snake[1].GetComponent<Rigidbody>().velocity = transform.right * snakeSpeed;
 
-       // Debug.Log(snake[1].transform.position+"2");
+        bodySize = Vector3.Magnitude(snake[1].transform.position - snake[2].transform.position);
     }
 
     /// <summary>
@@ -144,7 +147,7 @@ public class SnakeControl : MonoBehaviour
 
             temp = disPos;
 
-            disPos -= a;
+            disPos -= a*bodySize;
 
             // Debug.Log(disPos+"1");
             // Debug.Log(snakePos[i,0]+"2");
@@ -171,7 +174,7 @@ public class SnakeControl : MonoBehaviour
 
             //movePos = Vector3.Project(disPos, snakePos[i, 0]);
             movePos = snake[i - 1].transform.position - snake[i].transform.position;
-            movePos -= (movePos / Vector3.Magnitude(movePos));
+            movePos -= (movePos / Vector3.Magnitude(movePos)*bodySize);
 
 
             //移动各个body的位置；
