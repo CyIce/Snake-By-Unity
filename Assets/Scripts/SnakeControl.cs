@@ -45,7 +45,7 @@ public class SnakeControl : MonoBehaviour
     {
         int i;
 
-        snakeSize = 3;
+        snakeSize = 6;
 
         snakeMoveDir = 2;
 
@@ -118,7 +118,10 @@ public class SnakeControl : MonoBehaviour
     {
         int i;
         //用于储存两段body之间的向量差（除去body的半径）；
-        Vector3 disPos;
+        Vector3 disPos, temp;
+
+        //用于储存disPos和snakePos[i,0]的方向向量；
+        Vector3 a, b;
 
         //用于储存下一段body需要移动的向量；
         Vector3 movePos;
@@ -132,20 +135,43 @@ public class SnakeControl : MonoBehaviour
 
             disPos = snake[i - 1].transform.position - snake[i].transform.position;
 
-            disPos -= (disPos / Vector3.Magnitude(disPos));
+            a = disPos / Vector3.Magnitude(disPos); ;
+            b = snakePos[i, 0] / Vector3.Magnitude(snakePos[i, 0]);
 
-           // Debug.Log(disPos+"1");
-           // Debug.Log(snakePos[i,0]+"2");
+            //Debug.Log("a" + a);
+            //Debug.Log("b" + b);
+            //Debug.Log("<a,b>"+Vector3.Dot(a, b));
+
+            temp = disPos;
+
+            disPos -= a;
+
+            // Debug.Log(disPos+"1");
+            // Debug.Log(snakePos[i,0]+"2");
+
 
             //判断向量disPos与snakePos[i,0]是否处于误差许可范围内；
-            if(Vector3.Dot(disPos,snakePos[i,0])<=angleMistake)
+            if (( Vector3.Dot(a, b)) <= angleMistake)
             {
+               // Debug.Log(i + " " + snakePos[i, 0]);
+               // Debug.Log(i+" "+snake[i].transform.position);
+
+               // Debug.Log("a" + a);
+                //Debug.Log(i+"b" + b);
+               // Debug.Log("<a,b>"+Vector3.Dot(a, b));
+                //移动下一段body对其上一段；
+                temp = Vector3.Project(temp, snakePos[i, 0]);
+                snake[i].transform.position += temp;
+
+
                 snakePos[i, 0] = disPos;
 
-                Debug.Log(Vector3.Dot(disPos, snakePos[i, 0]));
+
             }
 
-            movePos = Vector3.Project(disPos, snakePos[i, 0]);
+            //movePos = Vector3.Project(disPos, snakePos[i, 0]);
+            movePos = snake[i - 1].transform.position - snake[i].transform.position;
+            movePos -= (movePos / Vector3.Magnitude(movePos));
 
 
             //移动各个body的位置；
