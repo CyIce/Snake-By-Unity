@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Follow : MonoBehaviour {
+public class CameraFollow : MonoBehaviour {
+
+    public GameObject snakeHead;
 
 	void Start ()
     {
