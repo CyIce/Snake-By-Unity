@@ -11,12 +11,12 @@ public class SnakeControl : MonoBehaviour
     private Vector3[,] snakePos = new Vector3[10, 2];
 
     //snake的长度；
-    private int snakeSize;
+    public int snakeSize;
 
     //记录snake的运动速度；
     public float snakeSpeed;
 
-    //记录snake移动的方向,上下左右分别为1、2、3、4；
+    //记录snake移动的方向,上下左右分别为1、2、3、4,0表示跳跃；
     private int snakeMoveDir;
 
     void Start()
@@ -41,7 +41,7 @@ public class SnakeControl : MonoBehaviour
         int i;
 
 
-        snakeSize = 6;
+        snakeSize = 3;
 
         snakeMoveDir = 4;
 
@@ -86,6 +86,12 @@ public class SnakeControl : MonoBehaviour
             snakeMoveDir = 4;
         }
 
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            snake[1].GetComponent<Rigidbody>().velocity = Vector3.up * snakeSpeed;
+
+            snakeMoveDir = 0;
+        }
     }
 
     //控制snake的身体跟随snake的头；
