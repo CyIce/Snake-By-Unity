@@ -30,6 +30,7 @@ public class SnakeControl : MonoBehaviour
         controlSnake();
 
         follow();
+
     }
 
 
@@ -105,9 +106,10 @@ public class SnakeControl : MonoBehaviour
         {
             direction = snake[i - 1].transform.position - snake[i].transform.position;
 
-            direction -= direction / Vector3.Magnitude(direction);
+            direction = (direction / Vector3.Magnitude(direction));
 
             snake[i].GetComponent<Rigidbody>().velocity = direction * snakeSpeed;
+
 
         }
     }
