@@ -25,11 +25,17 @@ public class SnakeGrow : MonoBehaviour
 
         size = snakeControl.snakeSize;
 
-        bodyPos = snakeControl.snake[size].transform.position;
+        bodyPos = 2 * snakeControl.snake[size].transform.position -
+                      snakeControl.snake[size - 1].transform.position;
 
-        //生成新的body；
-        Instantiate(body, bodyPos, Quaternion.identity);
 
         snakeControl.snakeSize++;
+        //生成新的body；
+        snakeControl.snake[size+1]=Instantiate(body);
+
+        snakeControl.snake[size + 1].transform.position = bodyPos;
+
+
+        
     }
 }

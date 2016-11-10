@@ -9,13 +9,14 @@ public class EatFood : MonoBehaviour
 
     void Start()
     {
-        createFood = GetComponent<CreateFood>();
-        snakeGrow = GetComponent<SnakeGrow>();
+        createFood = GameObject.Find("Main Camera").GetComponent<CreateFood>();
+        snakeGrow = GameObject.Find("Main Camera").GetComponent<SnakeGrow>();
 
     }
 
     void OnTriggerEnter(Collider collider)
     {
+       
         if(collider.tag=="Food")
         {
             Destroy(collider.gameObject);
