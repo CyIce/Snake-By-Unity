@@ -62,37 +62,40 @@ public class SnakeControl : MonoBehaviour
     /// </summary>
     void controlSnake()
     {
-        if (Input.GetKeyDown(KeyCode.UpArrow) && snakeMoveDir != 2)
+
+        if (Input.GetKey(KeyCode.UpArrow) && snakeMoveDir != 2)
         {
-            snake[1].GetComponent<Rigidbody>().velocity = Vector3.forward * snakeSpeed;
+            snake[1].GetComponent<Rigidbody>().velocity = transform.forward * snakeSpeed;
 
             snakeMoveDir = 1;
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow) && snakeMoveDir != 1)
+        if (Input.GetKey(KeyCode.DownArrow) && snakeMoveDir != 1)
         {
-            snake[1].GetComponent<Rigidbody>().velocity = Vector3.back * snakeSpeed;
+            snake[1].GetComponent<Rigidbody>().velocity = -transform.forward * snakeSpeed;
 
             snakeMoveDir = 2;
         }
-        if (Input.GetKeyDown(KeyCode.LeftArrow) && snakeMoveDir != 4)
+        if (Input.GetKey(KeyCode.LeftArrow) && snakeMoveDir != 4)
         {
-            snake[1].GetComponent<Rigidbody>().velocity = Vector3.left * snakeSpeed;
+            snake[1].GetComponent<Rigidbody>().velocity = -transform.right * snakeSpeed;
 
             snakeMoveDir = 3;
         }
-        if (Input.GetKeyDown(KeyCode.RightArrow) && snakeMoveDir != 3)
+        if (Input.GetKey(KeyCode.RightArrow) && snakeMoveDir != 3)
         {
-            snake[1].GetComponent<Rigidbody>().velocity = Vector3.right * snakeSpeed;
+            snake[1].GetComponent<Rigidbody>().velocity = transform.right * snakeSpeed;
 
             snakeMoveDir = 4;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKey(KeyCode.Space))
         {
             snake[1].GetComponent<Rigidbody>().velocity = Vector3.up * snakeSpeed;
 
             snakeMoveDir = 0;
         }
+
+
     }
 
     //控制snake的身体跟随snake的头；

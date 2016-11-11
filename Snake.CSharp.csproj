@@ -69,6 +69,7 @@
     <Compile Include="Assets\Scripts\CameraFollow.cs" />
     <Compile Include="Assets\Scripts\CreateFood.cs" />
     <Compile Include="Assets\Scripts\EatFood.cs" />
+    <Compile Include="Assets\Scripts\Portal.cs" />
     <Compile Include="Assets\Scripts\SnakeControl.cs" />
     <Compile Include="Assets\Scripts\SnakeGrow.cs" />
   </ItemGroup>
