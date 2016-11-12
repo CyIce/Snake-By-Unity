@@ -10,16 +10,16 @@ public class SnakeControl : MonoBehaviour
     //获取snakeBody上的Rigidbody组件；
     public Rigidbody[] snakeRigi = new Rigidbody[1000];
 
-    //用于记录snake各个部位的位置和运动方向,[ ,0]记录运动方向；
-    private Vector3[,] snakePos = new Vector3[1000, 2];
-
     //snake的长度；
-    public int snakeSize;
+    public int snakeSize = 3;
 
     //记录snake的运动速度；
     public float snakeSpeed;
-
+    //记录snake的跳跃高度；
     private float JumpHeight;
+
+    //记录portal之间的距离；
+    public float PortalDistance = 5f;
 
     //记录玩家键入的方向；
     private float h;
@@ -36,22 +36,18 @@ public class SnakeControl : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(snakeRigi[1].velocity);
+
         controlSnake();
 
         follow();
-
     }
-
 
     /// <summary>
     /// 对snake进行初始化；
     /// </summary>
     void initialize()
     {
-        snakeSize = 3;
-
-        snakeMoveDir = 4;
-
         JumpHeight = snakeSpeed / 2;
 
         for (int i = 1; i <= snakeSize; i++)
@@ -67,27 +63,28 @@ public class SnakeControl : MonoBehaviour
     /// </summary>
     void controlSnake()
     {
+        //用于储存snakeHead的运动速度；
+        Vector3 moveVec;
 
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
         if(h!=0||v!=0)
         {
-            if(h!=0&&v!=0)
-            {
-                //控制snakeHead的速度一定；
-                h /= Mathf.Sqrt(2);
-                v = h;
-            }
+            //固定snakeHead的运动速率为snakeSpeed；
+            moveVec = new Vector3(h, 0, v);
+            moveVec = Vector3.Normalize(moveVec) * snakeSpeed;
 
-            snakeRigi[1].velocity = new Vector3(h, 0, v) * snakeSpeed;
+            snakeRigi[1].velocity = moveVec;
         }
 
         if(Input.GetKey(KeyCode.Space))
         {
-            snakeRigi[1].velocity = Vector3.up * JumpHeight;
+            moveVec = snakeRigi[1].velocity+Vector3.up*JumpHeight;
+            moveVec = Vector3.Normalize(moveVec) * snakeSpeed;
 
-            snakeMoveDir = 0;
+            snakeRigi[1].velocity = moveVec;
+
         }
 
 
@@ -109,9 +106,11 @@ public class SnakeControl : MonoBehaviour
 
             direction = snake[i - 1].transform.position - snake[i].transform.position;
 
-            direction = (direction / Vector3.Magnitude(direction));
-
-            snakeRigi[i].velocity = direction * snakeSpeed;
+            if(Vector3.Magnitude(direction)<PortalDistance)
+            {
+                direction = Vector3.Normalize(direction);
+                snakeRigi[i].velocity = direction * snakeSpeed;
+            }
 
         }
     }
