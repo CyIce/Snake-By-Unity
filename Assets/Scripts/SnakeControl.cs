@@ -19,6 +19,12 @@ public class SnakeControl : MonoBehaviour
     //记录snake的运动速度；
     public float snakeSpeed;
 
+    private float JumpHeight;
+
+    //记录玩家键入的方向；
+    private float h;
+    private float v;
+
     //记录snake移动的方向,上下左右分别为1、2、3、4,0表示跳跃；
     private int snakeMoveDir;
 
@@ -49,6 +55,8 @@ public class SnakeControl : MonoBehaviour
 
         snakeMoveDir = 4;
 
+        JumpHeight = snakeSpeed / 2;
+
 
         for (i = 1; i <= snakeSize; i++)
         {
@@ -68,34 +76,17 @@ public class SnakeControl : MonoBehaviour
     void controlSnake()
     {
 
-        if (Input.GetKey(KeyCode.UpArrow) && snakeMoveDir != 2)
-        {
-            snakeRigi[1].velocity = transform.forward * snakeSpeed;
+        h = Input.GetAxisRaw("Horizontal");
+        v = Input.GetAxisRaw("Vertical");
 
-            snakeMoveDir = 1;
-        }
-        if (Input.GetKey(KeyCode.DownArrow) && snakeMoveDir != 1)
+        if(h!=0||v!=0)
         {
-            snakeRigi[1].velocity = -transform.forward * snakeSpeed;
-
-            snakeMoveDir = 2;
-        }
-        if (Input.GetKey(KeyCode.LeftArrow) && snakeMoveDir != 4)
-        {
-            snakeRigi[1].velocity = -transform.right * snakeSpeed;
-
-            snakeMoveDir = 3;
-        }
-        if (Input.GetKey(KeyCode.RightArrow) && snakeMoveDir != 3)
-        {
-            snakeRigi[1].velocity = transform.right * snakeSpeed;
-
-            snakeMoveDir = 4;
+            snakeRigi[1].velocity = new Vector3(h, 0, v) * snakeSpeed;
         }
 
         if(Input.GetKey(KeyCode.Space))
         {
-            snakeRigi[1].velocity = Vector3.up * snakeSpeed;
+            snakeRigi[1].velocity = Vector3.up * JumpHeight;
 
             snakeMoveDir = 0;
         }
