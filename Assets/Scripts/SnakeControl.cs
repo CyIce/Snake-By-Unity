@@ -11,7 +11,7 @@ public class SnakeControl : MonoBehaviour
     public Rigidbody[] snakeRigi = new Rigidbody[1000];
 
     //用于记录snake各个部位的位置和运动方向,[ ,0]记录运动方向；
-    private Vector3[,] snakePos = new Vector3[10, 2];
+    private Vector3[,] snakePos = new Vector3[1000, 2];
 
     //snake的长度；
     public int snakeSize;
@@ -48,22 +48,14 @@ public class SnakeControl : MonoBehaviour
     /// </summary>
     void initialize()
     {
-        int i;
-
-
         snakeSize = 3;
 
         snakeMoveDir = 4;
 
         JumpHeight = snakeSpeed / 2;
 
-
-        for (i = 1; i <= snakeSize; i++)
+        for (int i = 1; i <= snakeSize; i++)
         {
-            snakePos[i, 1] = snake[i].transform.position;
-
-            snakePos[i, 0] = transform.right;
-
             snakeRigi[i] = snake[i].GetComponent<Rigidbody>();
 
             snakeRigi[i].velocity = Vector3.right * snakeSpeed;
@@ -81,6 +73,13 @@ public class SnakeControl : MonoBehaviour
 
         if(h!=0||v!=0)
         {
+            if(h!=0&&v!=0)
+            {
+                //控制snakeHead的速度一定；
+                h /= Mathf.Sqrt(2);
+                v = h;
+            }
+
             snakeRigi[1].velocity = new Vector3(h, 0, v) * snakeSpeed;
         }
 
@@ -94,7 +93,10 @@ public class SnakeControl : MonoBehaviour
 
     }
 
-    //控制snake的身体跟随snake的头；
+
+    /// <summary>
+    /// 控制snake的身体跟随snake的头；
+    /// </summary>
     void follow()
     {
 
@@ -103,12 +105,13 @@ public class SnakeControl : MonoBehaviour
 
         for (int i = 2; i <= snakeSize; i++)
         {
+            //lastSpeed = Vector3.Magnitude(snakeRigi[i - 1].velocity);
+
             direction = snake[i - 1].transform.position - snake[i].transform.position;
 
             direction = (direction / Vector3.Magnitude(direction));
 
             snakeRigi[i].velocity = direction * snakeSpeed;
-
 
         }
     }
