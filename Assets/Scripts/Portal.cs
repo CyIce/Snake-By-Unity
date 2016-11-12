@@ -24,7 +24,10 @@ public class Portal : MonoBehaviour {
     {
         if(collider.tag=="SnakeBody")
         {
+            Debug.Log(gameObject);
+
             collider.gameObject.transform.position = NewPos;
+
         }
     }
 }

@@ -30,10 +30,15 @@ public class SnakeGrow : MonoBehaviour
 
 
         snakeControl.snakeSize++;
-        //生成新的body；
-        snakeControl.snake[size+1]=Instantiate(body);
 
-        snakeControl.snake[size + 1].transform.position = bodyPos;
+        size++;
+
+        //生成新的body；
+        snakeControl.snake[size]=Instantiate(body);
+
+        snakeControl.snake[size].transform.position = bodyPos;
+
+        snakeControl.snakeRigi[size] = snakeControl.snake[size].GetComponent<Rigidbody>();
 
 
         

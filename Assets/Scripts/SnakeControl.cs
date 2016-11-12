@@ -5,7 +5,10 @@ public class SnakeControl : MonoBehaviour
 {
 
     //用于储存snake的各个部位；
-    public GameObject[] snake = new GameObject[10];
+    public GameObject[] snake = new GameObject[1000];
+
+    //获取snakeBody上的Rigidbody组件；
+    public Rigidbody[] snakeRigi = new Rigidbody[1000];
 
     //用于记录snake各个部位的位置和运动方向,[ ,0]记录运动方向；
     private Vector3[,] snakePos = new Vector3[10, 2];
@@ -53,7 +56,9 @@ public class SnakeControl : MonoBehaviour
 
             snakePos[i, 0] = transform.right;
 
-            snake[i].GetComponent<Rigidbody>().velocity = Vector3.right * snakeSpeed;
+            snakeRigi[i] = snake[i].GetComponent<Rigidbody>();
+
+            snakeRigi[i].velocity = Vector3.right * snakeSpeed;
         }
     }
 
@@ -65,32 +70,32 @@ public class SnakeControl : MonoBehaviour
 
         if (Input.GetKey(KeyCode.UpArrow) && snakeMoveDir != 2)
         {
-            snake[1].GetComponent<Rigidbody>().velocity = transform.forward * snakeSpeed;
+            snakeRigi[1].velocity = transform.forward * snakeSpeed;
 
             snakeMoveDir = 1;
         }
         if (Input.GetKey(KeyCode.DownArrow) && snakeMoveDir != 1)
         {
-            snake[1].GetComponent<Rigidbody>().velocity = -transform.forward * snakeSpeed;
+            snakeRigi[1].velocity = -transform.forward * snakeSpeed;
 
             snakeMoveDir = 2;
         }
         if (Input.GetKey(KeyCode.LeftArrow) && snakeMoveDir != 4)
         {
-            snake[1].GetComponent<Rigidbody>().velocity = -transform.right * snakeSpeed;
+            snakeRigi[1].velocity = -transform.right * snakeSpeed;
 
             snakeMoveDir = 3;
         }
         if (Input.GetKey(KeyCode.RightArrow) && snakeMoveDir != 3)
         {
-            snake[1].GetComponent<Rigidbody>().velocity = transform.right * snakeSpeed;
+            snakeRigi[1].velocity = transform.right * snakeSpeed;
 
             snakeMoveDir = 4;
         }
 
         if(Input.GetKey(KeyCode.Space))
         {
-            snake[1].GetComponent<Rigidbody>().velocity = Vector3.up * snakeSpeed;
+            snakeRigi[1].velocity = Vector3.up * snakeSpeed;
 
             snakeMoveDir = 0;
         }
@@ -111,7 +116,7 @@ public class SnakeControl : MonoBehaviour
 
             direction = (direction / Vector3.Magnitude(direction));
 
-            snake[i].GetComponent<Rigidbody>().velocity = direction * snakeSpeed;
+            snakeRigi[i].velocity = direction * snakeSpeed;
 
 
         }
