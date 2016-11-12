@@ -7,13 +7,22 @@ public class Portal : MonoBehaviour {
 
     private Vector3 NewPos;
 
+
+    //另一个Portal上的脚本；
+    private Portal portal;
+
     private float snakeHight = 0.5f;
 
     void Start()
     {
+        
+
+        portal = otherPortal.GetComponent<Portal>();
+
         NewPos = otherPortal.transform.position;
 
         NewPos.y = snakeHight;
+        portal.enabled = false;
     }
 
 	void Update ()
@@ -24,6 +33,8 @@ public class Portal : MonoBehaviour {
     {
         if(collider.tag=="SnakeBody")
         {
+            //portal.enabled = false;
+
             collider.gameObject.transform.position = NewPos;
         }
     }
