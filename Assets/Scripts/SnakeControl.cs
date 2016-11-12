@@ -69,24 +69,21 @@ public class SnakeControl : MonoBehaviour
         h = Input.GetAxisRaw("Horizontal");
         v = Input.GetAxisRaw("Vertical");
 
+        moveVec = snakeRigi[1].velocity;
+
         if(h!=0||v!=0)
         {
-            //固定snakeHead的运动速率为snakeSpeed；
             moveVec = new Vector3(h, 0, v);
-            moveVec = Vector3.Normalize(moveVec) * snakeSpeed;
-
-            snakeRigi[1].velocity = moveVec;
         }
 
         if(Input.GetKey(KeyCode.Space))
         {
-            moveVec = snakeRigi[1].velocity+Vector3.up*JumpHeight;
-            moveVec = Vector3.Normalize(moveVec) * snakeSpeed;
-
-            snakeRigi[1].velocity = moveVec;
-
+            moveVec = snakeRigi[1].velocity+Vector3.up*JumpHeight;       
         }
 
+        //固定snakeHead的运动速率为snakeSpeed；
+        moveVec = Vector3.Normalize(moveVec) * snakeSpeed;
+        snakeRigi[1].velocity = moveVec;
 
     }
 
@@ -99,6 +96,8 @@ public class SnakeControl : MonoBehaviour
 
         //用于记录每个body运动的方向；
         Vector3 direction;
+
+
 
         for (int i = 2; i <= snakeSize; i++)
         {
